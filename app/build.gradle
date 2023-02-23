@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.eventory"
-        minSdk 23
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -38,7 +38,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.1.0'
     implementation 'com.google.firebase:firebase-firestore:24.4.1'
 
-    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:21.1.0'
+
+
+
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
@@ -55,12 +59,16 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    implementation 'jp.wasabeef:blurry:4.0.1'
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
     //Jsoup
     implementation 'org.jsoup:jsoup:1.14.3'
+
+    //image zoom
+    implementation 'com.github.chrisbanes.photoview:library:1.2.4'
 
 
 }

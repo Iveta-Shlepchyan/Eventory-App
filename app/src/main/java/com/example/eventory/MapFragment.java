@@ -1,6 +1,7 @@
 package com.example.eventory;
 
         import android.content.Context;
+        import android.content.res.Resources;
         import android.location.Address;
         import android.location.Geocoder;
         import android.os.Bundle;
@@ -18,16 +19,19 @@ package com.example.eventory;
         import com.google.android.gms.maps.CameraUpdate;
         import com.google.android.gms.maps.CameraUpdateFactory;
         import com.google.android.gms.maps.GoogleMap;
+        import com.google.android.gms.maps.GoogleMapOptions;
         import com.google.android.gms.maps.OnMapReadyCallback;
         import com.google.android.gms.maps.SupportMapFragment;
         import com.google.android.gms.maps.UiSettings;
         import com.google.android.gms.maps.model.LatLng;
+        import com.google.android.gms.maps.model.MapStyleOptions;
         import com.google.android.gms.maps.model.MarkerOptions;
         import com.google.android.gms.tasks.OnCompleteListener;
         import com.google.android.gms.tasks.Task;
         import com.google.firebase.firestore.DocumentSnapshot;
         import com.google.firebase.firestore.FirebaseFirestore;
         import com.google.firebase.firestore.GeoPoint;
+        import com.google.firebase.firestore.Query;
         import com.google.firebase.firestore.QueryDocumentSnapshot;
         import com.google.firebase.firestore.QuerySnapshot;
 
@@ -45,15 +49,12 @@ public class MapFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        String[] paths = {"Events/Movies/Movie", "Events/Concerts/Concert", "Theater", "Opera", "Clubs","Other"};
-
         // Initialize view
         View view=inflater.inflate(R.layout.fragment_map, container, false);
 
         // Initialize map fragment
         SupportMapFragment supportMapFragment=(SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.google_map);
-
 
 
 
@@ -66,6 +67,22 @@ public class MapFragment extends Fragment {
                 UiSettings UiSettings = googleMap.getUiSettings();
                 UiSettings.setZoomControlsEnabled(true);
 
+                try {
+                    // Customise the styling of the base map using a JSON object defined
+                    // in a raw resource file.
+                    boolean success = googleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                    getContext(), R.raw.style_json));
+
+                    if (!success) {
+                        Log.e("LocationMap", "Style parsing failed.");
+                    }
+                } catch (Resources.NotFoundException e) {
+                    Log.e("LocationMap", "Can't find style.", e);
+                }
+
+
+
 
                 // Add a marker in Yerevan and move the camera
                 LatLng yerevan = new LatLng(40.177200, 44.503490);
@@ -73,10 +90,15 @@ public class MapFragment extends Fragment {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(yerevan));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(yerevan,10));
 
-                for (String path:paths) {
-                    addMarkersFromDb(path, googleMap);
+              /*  for (String path:ContainerActivity.paths) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            addMarkersFromDb(path, googleMap,null);
+                        }
+                    }).start();
 
-                }
+                }*/
 
 
                 // When map is loaded
@@ -111,8 +133,8 @@ public class MapFragment extends Fragment {
         return view;
     }
 
-    public void addMarkersFromDb(String path, GoogleMap googleMap){
-        db.collection(path)
+/*    public void addMarkersFromDb(String path, GoogleMap googleMap){
+        db.collection("Tomsarkgh")//TODO change back to path
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -141,11 +163,13 @@ public class MapFragment extends Fragment {
                         }
                     }
                 });
-    }
+    }*/
+
 
     public LatLng getLocationFromAddress( String strAddress) {
 
-        Geocoder coder = new Geocoder(this.getContext());
+        Geocoder coder = new Geocoder(getContext());
+//        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault(), new FileBasedAddressCache(getContext()));
         List<Address> address;
         LatLng p1 = null;
 
@@ -161,9 +185,42 @@ public class MapFragment extends Fragment {
 
         } catch (IOException ex) {
 
-            ex.printStackTrace();
+            Log.e("Geocoder", "getLocationFromAddress failed \n Address : "+ strAddress);
         }
 
         return p1;
     }
+
+    public void addMarkersFromDb(String path, GoogleMap googleMap, DocumentSnapshot lastVisible) {
+        Query query;
+        if (lastVisible == null) {
+            //TODO change back to path
+            query = db.collection("Tomsarkgh").limit(5);
+        } else {
+            query = db.collection("Tomsarkgh").startAfter(lastVisible).limit(5);
+        }
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        try {
+                            String address = document.getString("place");
+                            LatLng place = getLocationFromAddress(address);
+                            googleMap.addMarker(new MarkerOptions().position(place).title(address));
+                        } catch (Exception exception) {
+                            Log.e("address conversion failed", "Tomsarkgh" + " " + document.getId());
+                        }
+                    }
+                    if (task.getResult().size() == 10) {
+                        //TODO change back to path
+                        addMarkersFromDb("Tomsarkgh", googleMap, task.getResult().getDocuments().get(task.getResult().size() - 1));
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Error" + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 }

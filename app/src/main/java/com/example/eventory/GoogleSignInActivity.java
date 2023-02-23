@@ -95,6 +95,4 @@ public class GoogleSignInActivity extends MainActivity{
 
     private void revoke(){}
 
-
-
 }

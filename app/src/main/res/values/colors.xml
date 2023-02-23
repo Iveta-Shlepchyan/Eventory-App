@@ -12,8 +12,10 @@
     <color name="desert_storm">#F8F7F5</color>
     <color name="eerie_black">#181818</color>
     <color name="grey">#999EA1</color>
+    <color name="cool_grey">#eeedf1</color>
     <color name="input">#FAFAFA</color>
     <color name="darker_input">#F5F5F5</color>
     <color name="icon_grey">#323232</color>
     <color name="orange_soda">#FF583E</color>
+    <color name="background">#F7F7F7</color>
 </resources>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".HomeFragment">
 
 
@@ -11,21 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
+        <TextView
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginStart="22dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="22dp"
-            android:background="@drawable/input_bg"
-            android:backgroundTint="@color/darker_input"
+            android:background="@drawable/bg_input"
+            android:backgroundTint="#F0F0F0"
             android:drawableLeft="@drawable/ic_search"
             android:drawableRight="@drawable/ic_filter"
             android:drawablePadding="10dp"
             android:fontFamily="@font/manrope"
             android:hint="@string/search"
-            android:inputType="text"
             android:paddingLeft="20dp"
             android:paddingTop="16dp"
             android:paddingRight="20dp"
@@ -36,12 +36,14 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <FrameLayout
+
             android:layout_marginTop="82dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
             <LinearLayout
+                android:id="@+id/events"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -58,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="23dp"
-                        android:fontFamily="@font/manrope_semibold"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="@string/browse_by_category"
                         android:textColor="@color/text_black"
                         android:textSize="18sp" />

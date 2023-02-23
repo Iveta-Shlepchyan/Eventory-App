@@ -4,29 +4,23 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventory.ContainerActivity;
-import com.example.eventory.LikeFragment;
+import com.example.eventory.EventPageActivity;
 import com.example.eventory.R;
 import com.example.eventory.models.CardModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -35,22 +29,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
     private List<CardModel> cardModelList;
-//    private static List<CardModel> likedCards;
 
     public CardAdapter(Context context, List<CardModel> cardModelList) {
         this.context = context;
         this.cardModelList = cardModelList;
     }
 
-//    public CardAdapter(List<CardModel> likedCards) {
-//        CardAdapter.likedCards = likedCards;
-//    }
-
 
     @NonNull
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item,parent,false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_event_list,parent,false));
     }
 
     @Override
@@ -59,10 +48,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             CardModel cardModel = cardModelList.get(position);
             Glide.with(context).load(cardModel.getImg_url()).into(holder.cardImg);
             holder.eventName.setText(cardModel.getName());
+            //TODO remove date_time
             holder.eventDateTime.setText(cardModel.getDate_time());
+            if (cardModel.getDate_time_list()!=null)
+                holder.eventDateTime.setText(cardModel.getDate_time_list().get(0));
             holder.eventPlace.setText(cardModel.getPlace());
             if(cardModel.getMin_price() == null)
-                holder.eventPrice.setBackgroundColor(0x0000000);
+                holder.eventPrice.setVisibility(View.GONE);
             holder.eventPrice.setText(cardModelList.get(position).getMin_price());
             if(cardModel.isLiked()){
                 holder.likeBtn.setBackgroundResource(R.drawable.ic_heart_card_pressed);
@@ -72,10 +64,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
 
-                /*LikeFragment likeFragment = new LikeFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("cardModel" ,cardModelList.get(position));
-                likeFragment.setArguments(bundle);*/
                 if (!cardModelList.get(position).isLiked()) {
 
                     cardModelList.get(position).setLiked(true);
@@ -85,9 +73,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
                 }else {
                     cardModelList.get(position).setLiked(false);
-                    holder.likeBtn.setBackgroundResource(R.drawable.navigation_heart_selector);
+                    holder.likeBtn.setBackgroundResource(R.drawable.ic_heart_card);
 
-                    ContainerActivity.likedCards.remove(cardModelList.get(position));
+
+                    for (CardModel likedCard: ContainerActivity.likedCards ) {
+                        if (likedCard.getName().equals(cardModel.getName())){
+                            ContainerActivity.likedCards.remove(likedCard);
+                            break;
+                        }
+                    }
                 }
 
                 Gson gson = new Gson();
@@ -99,14 +93,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 editor.putString("card_models", json);
                 editor.commit();
 
-                /*FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, likeFragment).commit();
-
-                BottomNavigationView mBottomNavigationView = (BottomNavigationView) ((AppCompatActivity) context).findViewById(R.id.bottomNavigationView);
-                mBottomNavigationView.getMenu().findItem(R.id.like).setChecked(true);*/
 
             }
         });
+
+            holder.eventCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, EventPageActivity.class);
+                    i.putExtra("info", cardModel);
+                    context.startActivity(i);
+                }
+            });
 
     }
 
@@ -116,9 +114,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView cardImg;
-        TextView eventName, eventDateTime, eventPlace, eventPrice;
+        private ImageView cardImg;
+        private TextView eventName, eventDateTime, eventPlace, eventPrice;
         private ImageButton likeBtn;
+        private CardView eventCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,7 +127,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             eventDateTime = itemView.findViewById(R.id.eventDateTime);
             eventPlace = itemView.findViewById(R.id.eventPlace);
             eventPrice = itemView.findViewById(R.id.eventMinPrice);
-            likeBtn = itemView.findViewById(R.id.like);
+            likeBtn = itemView.findViewById(R.id.likeBtn);
+            eventCard = itemView.findViewById(R.id.eventCard);
 
         }
     }

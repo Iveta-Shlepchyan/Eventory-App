@@ -28,13 +28,8 @@ import java.util.List;
 public class LikeFragment extends Fragment{
 
     private RecyclerView recyclerView;
-    private static List<CardModel> cardModels;
+
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-
-    public LikeFragment(List<CardModel> cardModels) {
-        this.cardModels = cardModels;
-    }
-
 
 
     @Nullable
@@ -46,25 +41,13 @@ public class LikeFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_like, container, false);
         recyclerView = root.findViewById(R.id.like_recView);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        String json = preferences.getString("card_models", "");
-        Type listType = new TypeToken<List<CardModel>>(){}.getType();
-        Gson gson = new Gson();
-        List<CardModel> cardModels = gson.fromJson(json, listType);
-
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        LikeAdapter likeAdapter = new LikeAdapter(getContext(), cardModels);
+        LikeAdapter likeAdapter = new LikeAdapter(getContext(), ContainerActivity.likedCards);
+        likeAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(likeAdapter);
         recyclerView.setRecycledViewPool(viewPool);
         recyclerView.setHasFixedSize(true);
-
-
-            /*if(getArguments()!= null) {
-                CardModel cardModel = (CardModel) getArguments().getSerializable("cardModel");
-                cardModels.add(cardModel);
-                likeAdapter.notifyDataSetChanged();
-            }*/
 
         return root;
     }

@@ -118,5 +118,15 @@
     <string name="museums">Museums</string>
     <string name="conference">Conference</string>
     <string name="free">free</string>
+    <string name="tickets">tickets</string>
+    <string name="duration">"Duration: "</string>
+    <string name="genre">"Genre: "</string>
+    <string name="age_restriction">"Age restriction: "</string>
+    <string name="price">"Price: "</string>
+    <string name="location">"Location: "</string>
+    <string name="tags">Tags</string>
+    <string name="select_date_and_time">Select date and time</string>
+
+    <string name="map_id">711879b40f0e9fb5</string>
 
 </resources>

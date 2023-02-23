@@ -1,11 +1,16 @@
 package com.example.eventory;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +53,14 @@ public class HomeFragment extends Fragment {
         recContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         buildItemList();
 
+        //FIXME home fragment
+        TextView search = root.findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContext().startActivity(new Intent(getContext(), ViewAllActivity.class));
+            }
+        });
 
 
 
@@ -55,16 +68,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void buildItemList() {
-        String[] paths = {"Events/Movies/Movie", "Events/Concerts/Concert", "Theater", "Opera", "Clubs",
-                "Entertainment","Tours","Interesting places","Museums","Conference","Other"};
         List<CategoryModel> categoryModelList = new ArrayList<>();
-        for (String path: paths) {
+        for (String path: ContainerActivity.paths) {
             buildSubItemList(path, new Callback() {
                 @Override
                 public void onCallback(List<CardModel> cardModels) {
                     CategoryModel categoryModel = new CategoryModel(path, cardModels);
                     categoryModelList.add(categoryModel);
-                    if(categoryModelList.size() == paths.length){
+                    if(categoryModelList.size() == ContainerActivity.paths.size()){
                         for (int i = categoryModelList.size() - 1; i >= 0; i--) {
                             if (categoryModelList.get(i).getCardModelList().isEmpty()) {
                                 categoryModelList.remove(i);
@@ -96,6 +107,9 @@ public class HomeFragment extends Fragment {
                                         }
                                     }
                                     cardModelList.add(cardModel);
+
+                                    if(!cardModel.getTags().isEmpty())
+                                        ContainerActivity.tags_set.addAll(cardModel.getTags());
                             }
                             callback.onCallback(cardModelList);
                         }

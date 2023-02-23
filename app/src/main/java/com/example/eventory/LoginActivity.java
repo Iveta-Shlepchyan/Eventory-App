@@ -31,7 +31,7 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         inputEmail = findViewById(R.id.email_input);
@@ -63,9 +63,10 @@ public class LoginActivity extends Activity {
         else if(password.isEmpty() || password.length() < 7){
             showError(inputPassword, "Password must be at least 7 characters long.");
         }
-        else if(email.matches("eventory@skiff.com") && password.matches("F@YeY!App")){
-            startActivity(new Intent(LoginActivity.this, SuperAdmin.class));
-        }
+        //FIXME loginActivity SuperAdmin
+//        else if(email.matches("eventory@skiff.com") && password.matches("F@YeY!App")){
+//            startActivity(new Intent(LoginActivity.this, SuperAdmin.class));
+//        }
         else{
             progressDialog.setMessage("Please wait. Login...");
             progressDialog.setTitle("Login");

@@ -1,0 +1,58 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "jp.wasabeef",
+    "module": "blurry",
+    "version": "4.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "blurry-4.0.1.aar",
+          "url": "blurry-4.0.1.aar",
+          "size": 16154,
+          "sha512": "10fb73b6ad47f48fe8633a9a80c1bb0855ba8e6b9cad5bb3cc28e3aa5b17561f380e45eb3d0e5ac6ff9502a39798b5ad1cc18834bb4c52255b24522f5e69b2b4",
+          "sha256": "3ecb91bcd44df7002470253086ae6815395ec91c148c54b1b91fe6a136bd6672",
+          "sha1": "4020ac5579dd9d4b8a2d15b83a822a9f01de0e7d",
+          "md5": "70e8a1706dfdaf870f70a198ac3f439f"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "blurry-4.0.1.aar",
+          "url": "blurry-4.0.1.aar",
+          "size": 16154,
+          "sha512": "10fb73b6ad47f48fe8633a9a80c1bb0855ba8e6b9cad5bb3cc28e3aa5b17561f380e45eb3d0e5ac6ff9502a39798b5ad1cc18834bb4c52255b24522f5e69b2b4",
+          "sha256": "3ecb91bcd44df7002470253086ae6815395ec91c148c54b1b91fe6a136bd6672",
+          "sha1": "4020ac5579dd9d4b8a2d15b83a822a9f01de0e7d",
+          "md5": "70e8a1706dfdaf870f70a198ac3f439f"
+        }
+      ]
+    }
+  ]
+}

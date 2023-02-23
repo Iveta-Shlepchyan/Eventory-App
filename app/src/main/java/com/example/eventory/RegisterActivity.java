@@ -40,7 +40,7 @@ public class RegisterActivity extends Activity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("RegisterActivity","started");
-        setContentView(R.layout.register_activity);
+        setContentView(R.layout.activity_register);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         inputEmail = findViewById(R.id.email_input);
